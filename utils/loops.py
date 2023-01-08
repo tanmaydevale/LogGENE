@@ -69,7 +69,7 @@ def trainLRclassification(model, trainLoader, valLoader, optimizer, criterion, t
     """
     for epoch in range(epochs):
         epoch_loss= 0.0
-        lr_val= classificationLR(model,train_loader, mask, tau, bSize= batch_is)
+        lr_val= classificationLR(model,trainLoader, mask, tau, bSize= 16)
         optimizer.param_groups[0]['lr']= lr_val
         # training loop
         model.train()
@@ -97,7 +97,7 @@ def trainLRclassification(model, trainLoader, valLoader, optimizer, criterion, t
             labels= labels.to(device)
             outputs= model(inputs)
             if loss_name== "BCE":
-                loss= criterion_(outputs.view(outputs.shape[0],), labels) # For BCE
+                loss= criterion(outputs.view(outputs.shape[0],), labels) # For BCE
             elif loss_name== "sBQC":
                 loss= criterion(labels, outputs.view(outputs.shape[0],), tau) # For sBQC
             val_loss+= loss.item()
